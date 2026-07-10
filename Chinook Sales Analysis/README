@@ -1,5 +1,8 @@
 # Análise de Vendas - Chinook
 
+#Por que escolhi esse banco de dados?
+  Escolhi o banco Chinook por ser um banco relacional amplamente utilizado para estudos de SQL. Ele contém informações sobre clientes, vendas, artistas, álbuns, músicas e gêneros, permitindo realizar análises semelhantes às encontradas em cenários de negócios.
+
 ## Objetivo
 
 ...
