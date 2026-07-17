@@ -4,9 +4,10 @@ Projeto de análise exploratória usando SQL puro sobre o banco de dados públic
 
 ## Ferramentas
 
-- SQL (SQLite)
-- SQLiteStudio
-- [Chinook Database](https://github.com/lerocha/chinook-database)
+* SQL (SQLite)
+* SQLiteStudio
+* Data Analysis
+* [Chinook Database](https://github.com/lerocha/chinook-database)
 
 ## Estrutura do repositório
 
