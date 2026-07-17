@@ -1,30 +1,221 @@
-# Análise de Vendas - Chinook
+# Análise de Vendas do Banco Chinook — SQL
 
-#Por que escolhi esse banco de dados?
-  Escolhi o banco Chinook por ser um banco relacional amplamente utilizado para estudos de SQL. Ele contém informações sobre clientes, vendas, artistas, álbuns, músicas e gêneros, permitindo realizar análises semelhantes às encontradas em cenários de negócios.
+Projeto de análise exploratória usando SQL puro sobre o banco de dados público **Chinook**, uma loja fictícia de venda de música digital. 
+O objetivo foi praticar SQL básico/intermediário (agregações, JOINs, GROUP BY) respondendo perguntas de negócio encadeadas — cada resposta motivando a próxima pergunta.
+
+## Ferramentas
+
+- SQL (SQLite)
+- SQLiteStudio
+- [Chinook Database](https://github.com/GustavoRyouji/SQL-Projects/Chinook Sales Analysis/chinook.db)
+
+## Estrutura do repositório
+
+```
+├── database/
+│   └── chinook.db
+├── queries/
+│   ├── 01_periodo_coberto.sql
+│   ├── 02_receita_total.sql
+│   ├── 03_pais_top_receita.sql
+│   ├── 04_1_clientes_por_pais.sql
+│   ├── 04_2_gasto_medio_por_pais.sql
+│   ├── 05_1_genero_mais_vendido.sql
+│   ├── 05_2_genero_maior_receita.sql
+│   ├── 06_1_musicas_por_genero.sql
+│   ├── 06_2_artistas_por_genero.sql
+│   ├── 06_3_albuns_por_genero.sql
+│   ├── 07_participacao_genero_receita_total.sql
+│   ├── 08_1_receita_total_usa.sql
+│   └── 08_2_participacao_genero_receita_usa.sql
+├── images/
+│   └── (prints dos resultados de cada consulta)
+└── README.md
+```
+
+Cada arquivo `.sql` contém a consulta comentada com a pergunta que ela responde. O banco está incluído no repositório — basta abrir com SQLite/SQLiteStudio e rodar as queries na ordem.
 
 ## Objetivo
 
-...
+Analisar os dados do banco Chinook utilizando SQL para identificar padrões de vendas e gerar insights de negócio, cobrindo o período de **01/01/2009** a **22/01/2013**.
 
-## Pergunta 1
+```sql
+-- Pergunta 1: qual o período coberto pelo banco?
+SELECT MIN(invoices.InvoiceDate), MAX(invoices.InvoiceDate) FROM invoices;
+```
 
-Qual gênero vende mais?
+## Receita total e distribuição geográfica
 
-### Query
+A loja faturou **US$ 2.328,60** ao longo do período analisado.
 
-(link para o arquivo SQL)
+```sql
+-- Pergunta 2: receita total gerada pelas vendas
+SELECT SUM(invoices.Total) AS total FROM invoices;
+```
 
-### Resultado
+Os **Estados Unidos** lideram a receita (US$ 523,06), seguidos por Canadá (US$ 303,96) e França (US$ 195,10).
 
-(imagem)
+```sql
+-- Pergunta 3: qual país contribuiu mais para a receita?
+SELECT customers.Country,
+       SUM(invoices.Total) AS total
+FROM customers
+JOIN invoices ON customers.CustomerId = invoices.CustomerId
+GROUP BY customers.Country
+ORDER BY total DESC
+LIMIT 10;
+```
 
-### Interpretação
+**Essa liderança vem de mais clientes ou de clientes que gastam mais?** As duas próximas queries isolam a causa.
 
-texto...
+```sql
+-- Pergunta 4.1: qual país tem mais clientes cadastrados?
+SELECT customers.Country,
+       COUNT(*) AS total
+FROM customers
+GROUP BY customers.Country
+ORDER BY total DESC
+LIMIT 3;
+```
 
----
+```sql
+-- Pergunta 4.2: qual país tem o maior gasto médio por cliente?
+SELECT customers.Country,
+       AVG(invoices.Total) AS total
+FROM customers
+JOIN invoices ON customers.CustomerId = invoices.CustomerId
+GROUP BY customers.Country
+ORDER BY total DESC
+LIMIT 10;
+```
 
-## Pergunta 2
+**Resultado:** os EUA têm o maior número de clientes, mas não o maior gasto médio — o Chile lidera nesse quesito com poucos clientes. Ou seja, a liderança americana em receita vem do **volume de clientes**, não do ticket médio.
 
-...
+## Desempenho por gênero musical
+
+```sql
+-- Pergunta 5.1: gênero mais vendido (em número de transações)
+SELECT genres.GenreId, genres.Name,
+       COUNT(invoice_items.TrackId) AS total
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY total DESC
+LIMIT 10;
+```
+
+```sql
+-- Pergunta 5.2: gênero que mais gerou receita
+SELECT genres.GenreId, genres.Name,
+       SUM(invoice_items.UnitPrice * invoice_items.Quantity) AS receita_total
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY receita_total DESC
+LIMIT 10;
+```
+
+**Rock** lidera nas duas métricas: 835 vendas e US$ 826,65 de receita — quase o dobro do segundo colocado, Latin. Isso levanta a pergunta seguinte: **o desempenho de Rock vem da preferência dos clientes, ou de ter mais músicas disponíveis para vender?**
+
+```sql
+-- Pergunta 6.1: quantidade de músicas por gênero
+SELECT genres.GenreId, genres.Name,
+       COUNT(tracks.TrackId) AS total
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY total DESC
+LIMIT 10;
+```
+
+```sql
+-- Pergunta 6.2: quantidade de artistas por gênero
+SELECT genres.GenreId, genres.Name,
+       COUNT(DISTINCT artists.ArtistId) AS total_artistas
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN albums ON tracks.AlbumId = albums.AlbumId
+JOIN artists ON albums.ArtistId = artists.ArtistId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY total_artistas DESC
+LIMIT 10;
+```
+
+```sql
+-- Pergunta 6.3: quantidade de álbuns por gênero
+SELECT genres.GenreId, genres.Name,
+       COUNT(DISTINCT albums.AlbumId) AS total_albuns
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN albums ON tracks.AlbumId = albums.AlbumId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY total_albuns DESC
+LIMIT 10;
+```
+
+Rock tem o maior catálogo (1.297 músicas contra 579 de Latin, o segundo colocado) e o maior número de artistas entre os gêneros com melhor desempenho comercial (51, atrás apenas de Classical, que não está entre os líderes de venda). A disponibilidade — não só a preferência — ajuda a explicar a liderança de Rock.
+
+## Participação na receita total
+
+Rock representa **35,50%** da receita da loja, seguido por Latin (16,41%) e Metal (11,22%).
+
+```sql
+-- Pergunta 7: participação de cada gênero na receita total
+SELECT genres.GenreId, genres.Name,
+       ROUND((SUM(invoice_items.UnitPrice * invoice_items.Quantity) / 2328.60) * 100, 2) AS porcentagem
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId
+GROUP BY genres.GenreId, genres.Name
+ORDER BY porcentagem DESC
+LIMIT 10;
+```
+
+> **Nota de limitação:** o valor `2328.60` foi obtido manualmente na Pergunta 2 e inserido como constante nesta query. O ideal seria calcular esse total dinamicamente com uma subquery, mas esse conceito ainda não faz parte do meu repertório — fica como próximo passo de estudo.
+
+Essa mesma distribuição se repete no principal mercado da loja, os EUA (US$ 523,06 de receita), na mesma ordem: Rock, Latin, Metal.
+
+```sql
+-- Pergunta 8.1: receita total gerada pelos EUA
+SELECT customers.Country AS country,
+       SUM(invoice_items.UnitPrice * invoice_items.Quantity) AS total
+FROM customers
+JOIN invoices ON customers.CustomerId = invoices.CustomerId
+JOIN invoice_items ON invoices.InvoiceId = invoice_items.InvoiceId
+WHERE customers.Country = 'USA'
+GROUP BY country
+ORDER BY total DESC;
+```
+
+```sql
+-- Pergunta 8.2: participação de cada gênero na receita dos EUA
+SELECT genres.Name,
+       ROUND((SUM(invoice_items.UnitPrice * invoice_items.Quantity) / 523.06) * 100, 2) AS porcentagem
+FROM genres
+JOIN tracks ON genres.GenreId = tracks.GenreId
+JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId
+JOIN invoices ON invoice_items.InvoiceId = invoices.InvoiceId
+WHERE invoices.BillingCountry = 'USA'
+GROUP BY genres.Name
+ORDER BY porcentagem DESC
+LIMIT 10;
+```
+
+> Mesma limitação da query anterior: `523.06` está fixo em vez de calculado por subquery.
+
+## Conclusão
+
+Os Estados Unidos são o principal mercado da loja, e isso se explica pela **quantidade de clientes cadastrados**, não pelo gasto médio individual. Entre os gêneros musicais, **Rock** lidera em vendas e receita (35,50% do faturamento total), sustentado por um catálogo maior de músicas e álbuns — o número de artistas isoladamente não explica essa liderança. Essa mesma distribuição de gêneros se repete no mercado americano, reforçando que o padrão de consumo local segue o padrão geral da loja.
+
+As conclusões estão restritas ao conjunto de dados do Chinook, que é pequeno (US$ 2.328,60 em receita total, 4 anos de dados) — um dataset de demonstração, não um cenário de negócio real.
+
+## Limitações e próximos passos
+
+Este foi meu primeiro projeto de SQL, feito com conhecimento básico/intermediário. Duas limitações conscientes:
+
+- **Sem subquery/CTE**: os percentuais de receita (Perguntas 7 e 8.2) usam valores de receita total fixados manualmente em vez de calculados dentro da própria query. Ainda não estudei subquery — próximo tópico da minha trilha.
+- **Sem window functions**: rankings e percentuais acumulados poderiam usar `RANK()` ou `PERCENT_RANK()` em vez de `ORDER BY` + `LIMIT`.
+
+Próximo projeto: Pandas (leitura de dados, filtro, `groupby`, `merge`, tratamento e agregação), seguido de um projeto combinando SQL + Pandas.
