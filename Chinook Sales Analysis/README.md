@@ -162,6 +162,15 @@ Os Estados Unidos são o principal mercado da loja, e isso se explica pela **qua
 
 As conclusões estão restritas ao conjunto de dados do Chinook, que é pequeno (US$ 2.328,60 em receita total, 4 anos de dados) — um dataset de demonstração, não um cenário de negócio real.
 
+## O que aprendi neste projeto
+
+- Diferença prática entre JOIN simples e JOIN encadeado (3+ tabelas) para 
+  conectar gêneros a receita via tracks e invoice_items.
+- Quando usar COUNT(DISTINCT ...) para evitar contagem duplicada em 
+  relações um-para-muitos (ex: artistas aparecendo em vários álbuns).
+- Estruturar uma análise como cadeia de perguntas, onde cada resultado 
+  motiva a query seguinte, em vez de escrever queries soltas.
+
 ## Limitações e próximos passos
 
 Este foi meu primeiro projeto de SQL, feito com conhecimento básico/intermediário. Duas limitações conscientes:
