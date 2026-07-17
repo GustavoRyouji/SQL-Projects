@@ -40,7 +40,7 @@ Analisar os dados do banco Chinook utilizando SQL para identificar padrões de v
 
 ### Pergunta 1: Qual é o período coberto no Banco Chinook?
 
-Consulta: [`01_periodo_coberto.sql`](queries/01_periodo_coberto.sql)
+Consulta: ![`01_periodo_coberto.sql`](queries/01_periodo_coberto.sql)
 
 Os dados abrangem aproximadamente 4 anos, de 01/01/2009 a 22/01/2013. Todas as análises seguintes consideram esse intervalo.
 
@@ -48,25 +48,25 @@ Os dados abrangem aproximadamente 4 anos, de 01/01/2009 a 22/01/2013. Todas as a
 
 ### Pergunta 2: Qual foi a receita total gerada pelas vendas?
 
-Consulta: [`02_receita_total.sql`](queries/02_receita_total.sql)
+Consulta: ![`02_receita_total.sql`](queries/02_receita_total.sql)
 
 A loja faturou **US$ 2.328,60** ao longo do período analisado. Esse valor é a base das próximas análises.
 
 ### Pergunta 3: Qual país contribuiu mais para essa receita?
 
-Consulta: [`03_pais_top_receita.sql`](queries/03_pais_top_receita.sql)
+Consulta: ![`03_pais_top_receita.sql`](queries/03_pais_top_receita.sql)
 
 Os **Estados Unidos** lideram (US$ 523,06), seguidos por Canadá (US$ 303,96) e França (US$ 195,10). Isso levanta a pergunta: essa liderança vem de mais clientes ou de clientes que gastam mais?
 
 ### Pergunta 4.1: Qual país possui o maior número de clientes?
 
-Consulta: [`04_1_clientes_por_pais.sql`](queries/04_1_clientes_por_pais.sql)
+Consulta: ![`04_1_clientes_por_pais.sql`](queries/04_1_clientes_por_pais.sql)
 
 Os EUA têm, de fato, o maior número de clientes cadastrados entre os países analisados.
 
 ### Pergunta 4.2: Qual país possui o maior gasto médio por cliente?
 
-Consulta: [`04_2_gasto_medio_por_pais.sql`](queries/04_2_gasto_medio_por_pais.sql)
+Consulta: ![`04_2_gasto_medio_por_pais.sql`](queries/04_2_gasto_medio_por_pais.sql)
 
 Os EUA têm o maior gasto médio entre os três países líderes em receita, mas não lideram esse quesito no geral — o Chile tem a maior média por cliente, mesmo com poucos clientes. **Conclusão:** a liderança americana em receita vem do volume de clientes, não do ticket médio.
 
@@ -74,31 +74,31 @@ Os EUA têm o maior gasto médio entre os três países líderes em receita, mas
 
 ### Pergunta 5.1: Qual é o gênero mais vendido?
 
-Consulta: [`05_1_genero_mais_vendido.sql`](queries/05_1_genero_mais_vendido.sql)
+Consulta: ![`05_1_genero_mais_vendido.sql`](queries/05_1_genero_mais_vendido.sql)
 
 **Rock** lidera com 835 vendas, quase o dobro de Latin (386), o segundo colocado. Mas volume de vendas não é o mesmo que receita — próxima pergunta confirma se a relação se mantém.
 
 ### Pergunta 5.2: Qual gênero gerou mais receita para a loja?
 
-Consulta: [`05_2_genero_maior_receita.sql`](queries/05_2_genero_maior_receita.sql)
+Consulta: ![`05_2_genero_maior_receita.sql`](queries/05_2_genero_maior_receita.sql)
 
 Rock também lidera em receita: US$ 826,65, seguido por Latin (US$ 382,14) e Metal (US$ 261,36). O gênero mais vendido é também o que mais fatura. Isso leva à pergunta: esse desempenho vem da preferência dos clientes, ou de Rock ter mais músicas disponíveis para vender?
 
 ### Pergunta 6.1: Qual gênero possui a maior quantidade de músicas?
 
-Consulta: [`06_1_musicas_por_genero.sql`](queries/06_1_musicas_por_genero.sql)
+Consulta: ![`06_1_musicas_por_genero.sql`](queries/06_1_musicas_por_genero.sql)
 
 Rock tem um catálogo de 1.297 músicas, contra apenas 579 de Latin, o segundo colocado.
 
 ### Pergunta 6.2: Qual gênero possui a maior quantidade de artistas?
 
-Consulta: [`06_2_artistas_por_genero.sql`](queries/06_2_artistas_por_genero.sql)
+Consulta: ![`06_2_artistas_por_genero.sql`](queries/06_2_artistas_por_genero.sql)
 
 Rock tem 51 artistas cadastrados, atrás apenas de Classical (66) — que não está entre os líderes de venda. Entre os gêneros comercialmente relevantes, Rock segue na frente também em variedade de artistas.
 
 ### Pergunta 6.3: Qual gênero possui a maior quantidade de álbuns?
 
-Consulta: [`06_3_albuns_por_genero.sql`](queries/06_3_albuns_por_genero.sql)
+Consulta: ![`06_3_albuns_por_genero.sql`](queries/06_3_albuns_por_genero.sql)
 
 Rock também lidera em número de álbuns. Entre música, artista e álbum, o padrão se repete: a liderança de Rock nas vendas está ligada à sua ampla disponibilidade de catálogo, não a um fator isolado.
 
@@ -106,7 +106,7 @@ Rock também lidera em número de álbuns. Entre música, artista e álbum, o pa
 
 ### Pergunta 7: Qual é a participação de cada gênero na receita total da loja?
 
-Consulta: [`07_participacao_genero_receita_total.sql`](queries/07_participacao_genero_receita_total.sql)
+Consulta: ![`07_participacao_genero_receita_total.sql`](queries/07_participacao_genero_receita_total.sql)
 
 Rock representa **35,50%** da receita total, seguido por Latin (16,41%) e Metal (11,22%).
 
@@ -116,13 +116,13 @@ Isso levanta a pergunta: essa mesma distribuição se mantém no principal merca
 
 ### Pergunta 8.1: Qual é a receita total gerada pelos Estados Unidos?
 
-Consulta: [`08_1_receita_total_usa.sql`](queries/08_1_receita_total_usa.sql)
+Consulta: ![`08_1_receita_total_usa.sql`](queries/08_1_receita_total_usa.sql)
 
 Os EUA geraram US$ 523,06 em receita no período.
 
 ### Pergunta 8.2: Como a receita dos Estados Unidos está distribuída entre os gêneros musicais?
 
-Consulta: [`08_2_participacao_genero_receita_usa.sql`](queries/08_2_participacao_genero_receita_usa.sql)
+Consulta: ![`08_2_participacao_genero_receita_usa.sql`](queries/08_2_participacao_genero_receita_usa.sql)
 
 Rock, Latin e Metal seguem na mesma ordem observada na loja como um todo. O mercado americano acompanha o padrão geral de consumo por gênero.
 
